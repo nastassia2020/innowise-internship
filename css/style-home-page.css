@@ -24,12 +24,13 @@ p {
 .header-burger{
     position: absolute;
     right: 1868px;
-    top: 15px;
+    top: 6px;
+    left: 32px;
 }
 .header-logo {
     position: absolute;
-    right: 1725px;
-    top: 10px;
+    left: 80px;
+    top: 1px;
 }
 .header-search {
     position: absolute;
@@ -41,6 +42,7 @@ p {
     height: 44px;
     opacity: 30%;
     left: 255px;
+    top: -7px;
 }
 .header-search-input {
     position: absolute;
@@ -77,13 +79,19 @@ p {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 260px;
+    width: 170px;
     margin-left: 1590px;
-    margin-top: 20px;
+    margin-top: 27px;
+}
+.header-userpic{
+    position: absolute;
+    right: 71px;
+    top: -5px;
+    left: 1810px;
 }
 .aside {
     width: 255px;
-    margin-top: 20px;
+    padding-top: 3px;
 }
 .aside-main-part {
     display: flex;
@@ -99,6 +107,9 @@ p {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+}
+.color-red{
+    color: #FF0000;
 }
 .aside-main-part-element a{
     margin-left: 12px;
@@ -309,3 +320,80 @@ p {
     border-radius: 12px;
 }
 
+@media screen and (max-width: 320px) {
+    body{
+        position: relative;
+        margin: 0;
+        padding: 0;
+    }
+    .header{
+         position: relative;
+    }
+    .header-logo {
+    position: absolute;
+    left: 15px;
+    top: 11px;
+}
+    .header-search {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    left: 20px;
+}
+    .header-search-input-img{
+    position: absolute;
+    left: 210px;
+    top: 20px;
+}
+.header-userpic{
+    position: absolute;
+    top: 9px;
+    left: 273px;
+    width: 30px;
+    height: 30px;
+}
+.header-burger, 
+.header-search-input, 
+.header-icons, .notifications, 
+.aside-additional-part, .aside-subscribtions,
+.main-first .main-content, 
+.main-second,
+.main-third{
+    display: none;
+}
+.main{
+    position: absolute;
+    top: 35px;
+    left: 17px;
+    width: 290px;
+    height: 920px;
+    overflow:  hidden;
+}
+.main-content-grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.main-content-grid-item{
+    height: 220px;
+}
+.main-content-grid img{
+    width: 288px;
+    height: 150px;
+}
+.aside{
+    position: absolute;
+    top: 950px;
+    left: 3px;
+    width: 320px;
+}
+.aside-main-part {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.aside-main-part-element{
+    display: flex;
+    flex-direction: column;
+}
+}
