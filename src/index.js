@@ -1,41 +1,163 @@
-export default class Calculator {
-  constructor(a = 0, b = 0) {
-    this.a = a;
-    this.b = b;
+import * as values from "./utilities/values.utility.js";
+import * as commands from "./utilities/commands.js";
+import Calculator from "./utilities/calculator.utility.js";
+
+const calc = document.querySelector(".calc");
+const result = document.querySelector("#result");
+
+let a = "";
+let b = "";
+let sign = "";
+let finish = false;
+const storedValue = [];
+
+const calcEquality = (value, calculator) => {
+  if (value === "=") {
+    if (b === "") b = a;
+    switch (sign) {
+      case "+":
+        a = calculator.execute(commands.addCommand, b);
+        break;
+      case "-":
+        a = calculator.execute(commands.subtractCommand, b);
+        break;
+      case "x":
+        a = calculator.execute(commands.multiplyCommand, b);
+        break;
+      case "/":
+        if (b !== "0") {
+          a = calculator.execute(commands.divideCommand, b);
+        } else {
+          clearAll();
+          result.innerText = "ERROR";
+        }
+        break;
+      case "xy":
+        a = calculator.execute(commands.powerCommand, b);
+        break;
+      case "y√x":
+        a = calculator.execute(commands.rootCommand, b);
+        break;
+    }
+    finish = true;
+    result.innerText = a;
   }
 
-  add() {
-    return this.a + this.b;
+  if (values.functions.includes(value)) {
+    switch (value) {
+      case "%":
+        a = calculator.execute(commands.percentageCommand);
+        break;
+      case "+/-":
+        a = calculator.execute(commands.toggleSignCommand);
+        break;
+      case "x2":
+        a = calculator.execute(commands.squareCommand);
+        break;
+      case "√x":
+        a = calculator.execute(commands.squareRootCommand);
+        break;
+      case "x3":
+        a = calculator.execute(commands.cubeCommand);
+        break;
+      case "3√x":
+        a = calculator.execute(commands.cubeRootCommand);
+        break;
+      case "1/x":
+        a = calculator.execute(commands.fractionCommand);
+        break;
+      case "x!":
+        a = calculator.execute(commands.factorialCommand);
+        break;
+      case "10x":
+        a = calculator.execute(commands.tenInPowwer);
+        break;
+    }
+    finish = true;
+    result.innerText = a;
   }
 
-  subtract() {
-    return this.a - this.b;
+  if (values.memory.includes(value)) {
+    switch (value) {
+      case "M+":
+        storedValue.push(calculator.currentValue);
+        a = storedValue[storedValue.length - 1];
+        break;
+      case "M-":
+        storedValue.pop();
+        break;
+      case "MR":
+        a = storedValue[storedValue.length - 1];
+        break;
+      case "MC":
+        storedValue.length = 0;
+        clearAll();
+        break;
+    }
+    result.innerText = a;
+  }
+};
+
+const clearAll = () => {
+  a = "";
+  b = "";
+  sign = "";
+  finish = false;
+  result.innerText = 0;
+};
+
+calc.addEventListener("click", (e) => {
+  const calculator = new Calculator(a);
+
+  const currentValueStr = result.innerText.toString();
+
+  if (e.target.textContent === "0") {
+    let checkForForbiddenZeroes = /^(\d+)[0]$|[*\\/+-][0]$/;
+
+    if (checkForForbiddenZeroes.test(currentValueStr)) {
+      return;
+    }
   }
 
-  multiply() {
-    return this.a * this.b;
+  if (e.target.textContent === ".") {
+    let checkForForbiddenDecimals = /^(\d+)[.]$|[.](\d+)$/;
+
+    if (checkForForbiddenDecimals.test(currentValueStr)) {
+      return;
+    }
   }
 
-  divide() {
-    return this.a / this.b;
+  if (!e.target.classList.contains("calc-btn")) return;
+  result.innerText = "";
+
+  if (e.target.classList.contains("clear")) {
+    clearAll();
+    calculator.commandHistory.push({ command: 0, value: 0, res: 0 });
   }
 
-  percentage() {
-    return this.a / 100;
-  }
-}
+  const value = e.target.innerText;
 
-class Command {
-  constructor(target) {
-    this.target = target;
-    this.commandsExecuted = [];
+  if (values.digit.includes(value)) {
+    if (b === "" && sign === "") {
+      a += value;
+      result.innerText = a;
+    } else if (a !== "" && b !== "" && finish) {
+      b = value;
+      finish = false;
+      result.innerText = b;
+    } else {
+      b += value;
+      result.innerText = b;
+    }
   }
 
-  execute(command) {
-    this.commandsExecuted.push(command);
-    return this.target[command]();
+  if (values.signs.includes(value)) {
+    sign = value;
+    result.innerText = sign;
+    console.log(a, b, sign);
   }
-}
 
-let x = new Command(new Calculator(8));
-console.log(x.execute("percentage"));
+  console.log("storedValue", storedValue);
+
+  calcEquality(value, calculator);
+});
