@@ -26,12 +26,10 @@ const calcEquality = (value, calculator) => {
         a = calculator.execute(commands.multiplyCommand, b);
         break;
       case "/":
-        if (b !== "0") {
-          a = calculator.execute(commands.divideCommand, b);
-        } else {
-          clearAll();
-          result.innerText = "ERROR";
+        if (b === "0") {
+          return (result.innerText = "ERROR");
         }
+        a = calculator.execute(commands.divideCommand, b);
         break;
       case "xy":
         a = calculator.execute(commands.powerCommand, b);
@@ -81,7 +79,7 @@ const calcEquality = (value, calculator) => {
   if (values.memory.includes(value)) {
     switch (value) {
       case "M+":
-        storedValue.push(calculator.currentValue);
+        storedValue.push(calculator.currentValue.toString());
         a = storedValue[storedValue.length - 1];
         result.innerText = a;
         break;
