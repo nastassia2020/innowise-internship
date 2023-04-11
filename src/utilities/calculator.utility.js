@@ -13,11 +13,19 @@ export default class Calculator {
   }
 
   undo() {
+    if (this.commandHistory.length === 0) {
+      console.log("undo", this.commandHistory);
+      return this.currentValue;
+    }
     const commandObject = this.commandHistory.pop();
-    this.currentValue = commandObject.command.undo(
-      commandObject.res,
-      commandObject.value
-    );
+    if (commandObject.command) {
+      this.currentValue = commandObject.command.undo(
+        commandObject.res,
+        commandObject.value
+      );
+    } else {
+      // Handle case where commandObject.command is undefined
+    }
     return this.currentValue;
   }
 }

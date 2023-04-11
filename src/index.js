@@ -1,3 +1,4 @@
+import "./style/main.css";
 import * as values from "./utilities/values.utility.js";
 import * as commands from "./utilities/commands.js";
 import Calculator from "./utilities/calculator.utility.js";
@@ -82,19 +83,22 @@ const calcEquality = (value, calculator) => {
       case "M+":
         storedValue.push(calculator.currentValue);
         a = storedValue[storedValue.length - 1];
+        result.innerText = a;
         break;
       case "M-":
         storedValue.pop();
         break;
       case "MR":
-        a = storedValue[storedValue.length - 1];
+        if (a !== "") {
+          b = storedValue[storedValue.length - 1];
+          result.innerText = b;
+        } else a = storedValue[storedValue.length - 1];
         break;
       case "MC":
         storedValue.length = 0;
         clearAll();
         break;
     }
-    result.innerText = a;
   }
 };
 
@@ -109,10 +113,15 @@ const clearAll = () => {
 calc.addEventListener("click", (e) => {
   const calculator = new Calculator(a);
 
-  const currentValueStr = result.innerText.toString();
+  let currentValueStr = result.innerText.toString();
+
+  if (e.target.textContent === "Back") {
+    a = calculator.undo();
+    return a;
+  }
 
   if (e.target.textContent === "0") {
-    let checkForForbiddenZeroes = /^(\d+)[0]$|[*\\/+-][0]$/;
+    let checkForForbiddenZeroes = /^[0]$|[*\\/+-][0]$/;
 
     if (checkForForbiddenZeroes.test(currentValueStr)) {
       return;
@@ -121,6 +130,10 @@ calc.addEventListener("click", (e) => {
 
   if (e.target.textContent === ".") {
     let checkForForbiddenDecimals = /^(\d+)[.]$|[.](\d+)$/;
+
+    if (currentValueStr[0] === ".") {
+      return (currentValueStr = "0" + currentValueStr[0]);
+    }
 
     if (checkForForbiddenDecimals.test(currentValueStr)) {
       return;
@@ -132,7 +145,6 @@ calc.addEventListener("click", (e) => {
 
   if (e.target.classList.contains("clear")) {
     clearAll();
-    calculator.commandHistory.push({ command: 0, value: 0, res: 0 });
   }
 
   const value = e.target.innerText;
@@ -152,6 +164,9 @@ calc.addEventListener("click", (e) => {
   }
 
   if (values.signs.includes(value)) {
+    if (a !== "" && b !== "" && !finish) {
+      calcEquality("=", calculator);
+    }
     sign = value;
     result.innerText = sign;
     console.log(a, b, sign);
