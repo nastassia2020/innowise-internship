@@ -114,32 +114,11 @@ calc.addEventListener("click", (e) => {
   let currentValueStr = result.innerText.toString();
 
   if (e.target.textContent === "Back") {
-    a = calculator.undo();
-    return a;
-  }
-
-  if (e.target.textContent === "0") {
-    let checkForForbiddenZeroes = /^[0]$|[*\\/+-][0]$/;
-
-    if (checkForForbiddenZeroes.test(currentValueStr)) {
-      return;
-    }
-  }
-
-  if (e.target.textContent === ".") {
-    let checkForForbiddenDecimals = /^(\d+)[.]$|[.](\d+)$/;
-
-    if (currentValueStr[0] === ".") {
-      return (currentValueStr = "0" + currentValueStr[0]);
-    }
-
-    if (checkForForbiddenDecimals.test(currentValueStr)) {
-      return;
-    }
+    console.log("undo from index  ", calculator.undo());
+    currentValueStr = calculator.undo();
   }
 
   if (!e.target.classList.contains("calc-btn")) return;
-  result.innerText = "";
 
   if (e.target.classList.contains("clear")) {
     clearAll();
@@ -148,6 +127,22 @@ calc.addEventListener("click", (e) => {
   const value = e.target.innerText;
 
   if (values.digit.includes(value)) {
+    if (value === ".") {
+      let checkForForbiddenDecimals = /^(\d+)[.]$|[*\/+-](\d+)[.]$|[.](\d+)$/;
+      if (checkForForbiddenDecimals.test(currentValueStr)) {
+        return;
+      }
+
+      if (currentValueStr[0] === ".") {
+        return currentValueStr.replace(/^\./, "0.");
+      }
+    }
+    if (value === "0") {
+      let checkForForbiddenZeroes = /^[0]$|[*\/+-][0]$/;
+      if (checkForForbiddenZeroes.test(currentValueStr)) {
+        return;
+      }
+    }
     if (b === "" && sign === "") {
       a += value;
       result.innerText = a;
@@ -167,10 +162,7 @@ calc.addEventListener("click", (e) => {
     }
     sign = value;
     result.innerText = sign;
-    console.log(a, b, sign);
   }
-
-  console.log("storedValue", storedValue);
 
   calcEquality(value, calculator);
 });
