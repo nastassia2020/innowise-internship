@@ -27,7 +27,7 @@ const mainSlice = createSlice({
       if (action.payload) {
         state.tasks.push({ id: uuid(), description: action.payload, isDone: false });
       }
-      console.log(state.tasks, 'addTasks ');
+      console.log(action.payload, 'addTasks ');
     },
     taskIsDoneHandler: (state, action) => {
       console.log('onCheckBoxClick   taskIsDoneHandler', action.payload);
@@ -35,9 +35,14 @@ const mainSlice = createSlice({
         task.id === action.payload ? (task.isDone = !task.isDone) : task,
       );
     },
+    taskChangeHandler: (state, action) => {
+      const { id, task } = action.payload;
+      const taskToUpdate = state.tasks.find(task => task.id === id);
+      if (taskToUpdate) {
+        taskToUpdate.description = task;
+      }
+    },
     deleteTaskHandler: (state, action) => {
-      console.log(action.payload.id, 'delete task ');
-      console.log(current(state.tasks), 'state tasks from delete trask handler');
       current(state.tasks).filter(item => {
         console.log(item.id, 'this is item');
         return item.id != action.payload.id;

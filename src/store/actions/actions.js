@@ -20,7 +20,7 @@ export const {
   addNewTaskHandler,
   taskIsDoneHandler,
   isDoneCheckHandler,
-  changeTaskHandler,
+  taskChangeHandler,
   mainErrorHandler,
   showCalendarHandler,
   changeCalendarDay,
@@ -163,30 +163,28 @@ export const fetchTasks = (date = defaultDay) => {
 
 export const changeTaskPatch = (item, date = defaultDay) => {
   const userDataBaseKey = JSON.parse(localStorage.getItem('data'));
-  console.log(item, 'item   taskIsDonePatch');
-
-  const { dataBaseKey, description, id } = item;
+  const { uniqCode, description, id, dataBaseKey } = item;
+  console.log(item, 'item was changed****');
   return dispatch => {
     // сначала изменения в базе данных
     axios
       .patch(
-        `https://smart-todo-645e5-default-rtdb.europe-west1.firebasedatabase.app/users/${userDataBaseKey}/collection/${date}/tasks/${dataBaseKey}.json`,
+        `https://smart-todo-645e5-default-rtdb.europe-west1.firebasedatabase.app/users/${userDataBaseKey}/collection/${dataBaseKey}/tasks/${uniqCode}.json`,
         {
-          description: description,
+          task: description,
         },
       )
-      .then(() => {
+      .then(res => {
         // потом в локал сторадж
         //const task = localStorage.getItem(`${item.description}`);
         localStorage.setItem(
-          `${item.description}`,
+          `${res.data.task}`,
           JSON.stringify({
-            description: item.description,
+            description: res.data.task,
             isDone: item.isDone,
           }),
         );
-        // потом изменения на клиенте
-        dispatch(changeTaskHandler(id));
+        dispatch(fetchTasks(date));
       });
   };
 };

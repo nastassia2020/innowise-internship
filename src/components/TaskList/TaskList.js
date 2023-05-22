@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Task } from './Task';
 import { useSelector, useDispatch } from 'react-redux';
-//import { addTasks } from '../../store/actions/actions';
 import {
   addNewTask,
-  taskIsDoneHandler,
+  changeTaskPatch,
   taskIsDonePatch,
-  changeTaskHandler,
 } from '../../store/actions/actions';
 
 import './TaskList.css';
@@ -34,10 +32,6 @@ const TaskList = ({ tasks }) => {
     setTask('');
   };
 
-  // const saveChangedTask = id => {
-  //   changeTaskHandler(id);
-  // };
-
   const toggleEditHandler = index => {
     setEditIndex(index === editIndex ? null : index);
   };
@@ -45,7 +39,7 @@ const TaskList = ({ tasks }) => {
   return (
     <div className="task-list">
       <p> {tasks.length} Tasks Today </p>
-      {tasks.map(item => (
+      {tasks.map((item, index) => (
         <Task
           key={item.id}
           id={item.id}
@@ -55,13 +49,23 @@ const TaskList = ({ tasks }) => {
           dataBaseKey={item.dataBaseKey}
           onCheckBoxClick={item => {
             dispatch(taskIsDonePatch(item, choosenDate));
-            console.log('taskIsDone!!!!', item.isDone);
           }}
-          // isEdit={editIndex === index}
-          // changeTask={() => toggleEditHandler(index)}
-          // typeTaskHandler={onChangeHandler(setTaskChanged)}
-          // changedTask={taskChanged}
-          // saveChangedTask={() => saveChangedTask(item.id)}
+          isEdit={editIndex === index}
+          changeTask={() => toggleEditHandler(index)}
+          typeTaskHandler={onChangeHandler(setTaskChanged)}
+          editedValue={taskChanged}
+          saveChangedTask={item => {
+            dispatch(
+              changeTaskPatch({
+                description: taskChanged,
+                id: item.id,
+                isDone: item.isDone,
+                dataBaseKey: item.dataBaseKey,
+                uniqCode: item.uniqCode,
+              }),
+            );
+            setEditIndex(null);
+          }}
         />
       ))}
 

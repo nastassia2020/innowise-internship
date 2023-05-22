@@ -10,9 +10,9 @@ const Task = ({
   onCheckBoxClick,
   typeTaskHandler,
   changeTask,
-  changedTask,
   saveChangedTask,
   deleteTask,
+  editedValue,
 }) => {
   return (
     <div className="task-div">
@@ -29,11 +29,15 @@ const Task = ({
       </div>
       {isEdit && (
         <form className="form">
-          <input className="form_input" onChange={typeTaskHandler} />
+          <input
+            className="form_input"
+            value={editedValue}
+            onChange={typeTaskHandler}
+          />
           <button
             type="button"
             className="add-new-task"
-            onClick={() => saveChangedTask(changedTask)}
+            onClick={() => saveChangedTask(item)}
           >
             Save changes
           </button>

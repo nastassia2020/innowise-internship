@@ -21,7 +21,7 @@ const CalendarList = ({ tasks }) => {
 
   const dateArr = [];
 
-  console.log('tasks****', tasks);
+  // console.log('tasks****', tasks);
 
   const toggleEditHandler = index => {
     setHasTasksIndex(index === hasTasksIndex ? null : index);
@@ -41,10 +41,13 @@ const CalendarList = ({ tasks }) => {
         const datesWithTasks = dateArrToString.filter(
           d => d === tasks[i].dataBaseKey,
         );
-        console.log('datesWithTasks****', datesWithTasks);
-        datesWithTasks.map(a => {});
+        // console.log('datesWithTasks****', datesWithTasks);
+        datesWithTasks.map(a => {
+          if (a === tasks[i].dataBaseKey) {
+          }
+        });
         if (tasks[i].isDone === false) {
-          console.log('tasks[i].isDone === false**** ', tasks[i].isDone === true);
+          // console.log('tasks[i].isDone === false**** ', tasks[i].isDone === true);
           setShowFirstDot(true);
         }
       }
