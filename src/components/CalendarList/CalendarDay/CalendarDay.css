@@ -22,11 +22,6 @@
 
 .calendar-day-active {
   color: white;
-  background-color: black;
-  border: 1px solid black;
-}
-.calendar-day:active {
-  color: white;
   background-color: orange;
   border: 1px solid orange;
 }

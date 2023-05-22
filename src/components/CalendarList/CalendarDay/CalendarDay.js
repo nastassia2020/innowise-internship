@@ -7,8 +7,9 @@ const CalendarDay = ({
   hasTasks,
   showFirstDot,
   showSecondDot,
+  isActive,
+  setIsActive,
 }) => {
-  const [isActive, setIsActive] = useState(false);
   const weekDay = item.toUTCString().slice(0, 3);
   const day = item.toUTCString().slice(5, 7);
 
@@ -16,7 +17,7 @@ const CalendarDay = ({
     <button
       className={isActive ? 'calendar-day calendar-day-active' : 'calendar-day'}
       onClick={() => {
-        setIsActive(true);
+        setIsActive(item);
         changeDayHandler(item.toISOString().slice(0, 10));
       }}
     >

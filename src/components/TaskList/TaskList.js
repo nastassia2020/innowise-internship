@@ -5,6 +5,7 @@ import {
   addNewTask,
   changeTaskPatch,
   taskIsDonePatch,
+  deleteTask,
 } from '../../store/actions/actions';
 
 import './TaskList.css';
@@ -13,8 +14,6 @@ const TaskList = ({ tasks }) => {
   const [addTask, setAddTask] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
   const { choosenDate } = useSelector(state => state.main);
-  //console.log('tasks from taskList******', tasks);
-  const userDataBaseKey = JSON.parse(localStorage.getItem('data'));
 
   const [task, setTask] = useState('');
   const [taskChanged, setTaskChanged] = useState('');
@@ -65,6 +64,10 @@ const TaskList = ({ tasks }) => {
               }),
             );
             setEditIndex(null);
+            setTaskChanged('');
+          }}
+          deleteTask={item => {
+            dispatch(deleteTask(item, choosenDate));
           }}
         />
       ))}

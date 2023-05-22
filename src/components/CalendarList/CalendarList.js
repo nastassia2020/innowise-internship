@@ -64,12 +64,13 @@ const CalendarList = ({ tasks }) => {
     <div>
       <div className="calendar">
         <div className="calendar-item">
-          {dateArr.map(item => (
+          {dateArr.map((item, index) => (
             <CalendarDay
               item={item}
               key={item}
               changeDayHandler={changeDayHandler}
-              // hasTasks={() => toggleEditHandler(index)}
+              isActive={hasTasksIndex === index}
+              setIsActive={() => toggleEditHandler(index)}
               showFirstDot={showFirstDot}
               // showSecondDot={() => {
               //   let current = item.toISOString().slice(0, 10);

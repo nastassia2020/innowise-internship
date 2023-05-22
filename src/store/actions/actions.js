@@ -20,10 +20,11 @@ export const {
   addNewTaskHandler,
   taskIsDoneHandler,
   isDoneCheckHandler,
-  taskChangeHandler,
+  // taskChangeHandler,
   mainErrorHandler,
   showCalendarHandler,
   changeCalendarDay,
+  // deleteTaskHandler,
   clearTasksWhenLogOut,
 } = mainSlice.actions;
 
@@ -176,7 +177,6 @@ export const changeTaskPatch = (item, date = defaultDay) => {
       )
       .then(res => {
         // потом в локал сторадж
-        //const task = localStorage.getItem(`${item.description}`);
         localStorage.setItem(
           `${res.data.task}`,
           JSON.stringify({
@@ -236,5 +236,22 @@ export const addNewTask = (task, date = defaultDay) => {
         dispatch(addNewTaskHandler(JSON.parse(res.config.data).task));
         dispatch(fetchTasks(date));
       });
+  };
+};
+
+export const deleteTask = (item, date = defaultDay) => {
+  const userDataBaseKey = JSON.parse(localStorage.getItem('data'));
+  const { uniqCode, description } = item;
+  return dispatch => {
+    axios
+      .delete(
+        `https://smart-todo-645e5-default-rtdb.europe-west1.firebasedatabase.app/users/${userDataBaseKey}/collection/${date}/tasks/${uniqCode}.json`,
+      )
+      .then(() => {
+        localStorage.removeItem(`${description}`);
+        dispatch(fetchTasks(date));
+        console.log('task was deleted');
+      })
+      .catch(err => dispatch(mainErrorHandler(err.response.data.message)));
   };
 };

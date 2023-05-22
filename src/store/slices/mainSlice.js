@@ -6,58 +6,32 @@ const mainSlice = createSlice({
   initialState: {
     showCalendar: false,
     choosenDate: new Date(Date.now()).toISOString().slice(0, 10),
-    tasks: [
-      // пример вида каждого task
-      // {
-      //   id: 1,
-      //   description: 'to do laundry',
-      //   isDone:false,
-      //   dataBaseKey: "-NV9uSZyXwCp2UojMciQ",
-      // },
-    ],
+    tasks: [],
   },
   reducers: {
     addTasks: (state, action) => {
       if (action.payload) {
         state.tasks = [...action.payload];
       }
-      console.log(state.tasks, 'addTasks ');
     },
     addNewTaskHandler: (state, action) => {
       if (action.payload) {
         state.tasks.push({ id: uuid(), description: action.payload, isDone: false });
       }
-      console.log(action.payload, 'addTasks ');
     },
     taskIsDoneHandler: (state, action) => {
-      console.log('onCheckBoxClick   taskIsDoneHandler', action.payload);
       state.tasks.map(task =>
         task.id === action.payload ? (task.isDone = !task.isDone) : task,
       );
-    },
-    taskChangeHandler: (state, action) => {
-      const { id, task } = action.payload;
-      const taskToUpdate = state.tasks.find(task => task.id === id);
-      if (taskToUpdate) {
-        taskToUpdate.description = task;
-      }
-    },
-    deleteTaskHandler: (state, action) => {
-      current(state.tasks).filter(item => {
-        console.log(item.id, 'this is item');
-        return item.id != action.payload.id;
-      });
     },
     mainErrorHandler: (state, action) => {
       state.error = action.payload;
       state.isError = true;
     },
     showCalendarHandler: state => {
-      console.log('show cLLENADR CLICKED');
       state.showCalendar = !state.showCalendar;
     },
     changeCalendarDay: (state, action) => {
-      //console.log(action.payload, 'changeCalendarDay');
       state.choosenDate = action.payload;
     },
     clearTasksWhenLogOut: state => {
