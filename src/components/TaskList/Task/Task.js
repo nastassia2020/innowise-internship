@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import { Modal } from '../../Modal/Modal';
 import './Task.css';
 
 const Task = ({
@@ -13,6 +14,10 @@ const Task = ({
   saveChangedTask,
   deleteTask,
   editedValue,
+  showModal,
+  handleCancelDeleting,
+  handleConfirmDeleting,
+  taskWasChose,
 }) => {
   return (
     <div className="task-div">
@@ -28,20 +33,23 @@ const Task = ({
         <p className="task-desc"> {description}</p>
       </div>
       {isEdit && (
-        <form className="form">
+        <form className="changeForm">
           <input
-            className="form_input"
+            className="changeForm_input"
             value={editedValue}
             onChange={typeTaskHandler}
           />
           <button
             type="button"
-            className="add-new-task"
+            className="change-task-button"
             onClick={() => saveChangedTask(item)}
           >
             Save changes
           </button>
         </form>
+      )}
+      {showModal && (
+        <Modal onConfirm={handleConfirmDeleting} onCancel={handleCancelDeleting} />
       )}
     </div>
   );

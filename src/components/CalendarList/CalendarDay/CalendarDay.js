@@ -1,35 +1,35 @@
-import { useState } from 'react';
+import React from 'react';
 import './CalendarDay.css';
 
 const CalendarDay = ({
   item,
   changeDayHandler,
   hasTasks,
-  showFirstDot,
-  showSecondDot,
   isActive,
   setIsActive,
+  currentDay,
 }) => {
   const weekDay = item.toUTCString().slice(0, 3);
   const day = item.toUTCString().slice(5, 7);
 
+  const showDots = hasTasks(item);
+
   return (
-    <button
-      className={isActive ? 'calendar-day calendar-day-active' : 'calendar-day'}
-      onClick={() => {
-        setIsActive(item);
-        changeDayHandler(item.toISOString().slice(0, 10));
-      }}
-    >
-      <div>{day}</div>
-      <div> {weekDay}</div>
-      {hasTasks && (
-        <div className="show-dots">
-          {showFirstDot && <div className="dot"> </div>}
-          {showSecondDot && <div className="second-dot"> </div>}
-        </div>
-      )}
-    </button>
+    <div className="day-wrapper">
+      <button
+        className={`calendar-day ${isActive ? 'calendar-day-active' : ''} ${
+          currentDay ? 'calendar-day-current' : ''
+        }`}
+        onClick={() => {
+          setIsActive(item);
+          changeDayHandler(item.toISOString().slice(0, 10));
+        }}
+      >
+        <div>{day}</div>
+        <div> {weekDay}</div>
+      </button>
+      {showDots}
+    </div>
   );
 };
 

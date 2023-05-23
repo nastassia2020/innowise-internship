@@ -13,6 +13,7 @@ import './TaskList.css';
 const TaskList = ({ tasks }) => {
   const [addTask, setAddTask] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
+  const [showModal, setShowModal] = useState(null);
   const { choosenDate } = useSelector(state => state.main);
 
   const [task, setTask] = useState('');
@@ -35,9 +36,26 @@ const TaskList = ({ tasks }) => {
     setEditIndex(index === editIndex ? null : index);
   };
 
+  const toggleDeleteHandler = index => {
+    setShowModal(index === editIndex ? null : index);
+  };
+
+  // const openDeleteModal = () => {
+  //   setShowModal(true);
+  // }
+
+  function handleConfirm() {
+    // process deletion
+    setShowModal(false);
+  }
+
+  function handleCancel() {
+    setShowModal(false);
+  }
+
   return (
     <div className="task-list">
-      <p> {tasks.length} Tasks Today </p>
+      <p> You have {tasks.length} tasks </p>
       {tasks.map((item, index) => (
         <Task
           key={item.id}
@@ -66,9 +84,13 @@ const TaskList = ({ tasks }) => {
             setEditIndex(null);
             setTaskChanged('');
           }}
-          deleteTask={item => {
+          deleteTask={() => toggleDeleteHandler(index)}
+          showModal={showModal === index}
+          handleConfirmDeleting={() => {
             dispatch(deleteTask(item, choosenDate));
+            setShowModal(null);
           }}
+          handleCancelDeleting={() => setShowModal(null)}
         />
       ))}
 
@@ -76,14 +98,20 @@ const TaskList = ({ tasks }) => {
         <form className="form">
           <input className="form_input" onChange={onChangeHandler(setTask)} />
           <button type="button" className="add-new-task" onClick={addNewTaskHandler}>
-            Add task
+            Save task
+          </button>
+          <button
+            type="button"
+            className="close-form"
+            onClick={() => setAddTask(false)}
+          >
+            X
           </button>
         </form>
       ) : (
         <>
-          <p> add new task </p>
           <button className="add-new-task" onClick={() => setAddTask(true)}>
-            +
+            Add new task
           </button>
         </>
       )}

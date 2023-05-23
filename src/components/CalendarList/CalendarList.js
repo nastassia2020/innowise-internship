@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { BsCalendarWeek } from 'react-icons/bs';
 import {
@@ -10,7 +10,6 @@ import { CalendarDay } from './CalendarDay';
 import './CalendarList.css';
 
 const CalendarList = ({ tasks }) => {
-  const [showFirstDot, setShowFirstDot] = useState(false);
   const [hasTasksIndex, setHasTasksIndex] = useState(null);
   const dispatch = useDispatch();
   const { showCalendar } = useSelector(state => state.main);
@@ -21,8 +20,6 @@ const CalendarList = ({ tasks }) => {
 
   const dateArr = [];
 
-  // console.log('tasks****', tasks);
-
   const toggleEditHandler = index => {
     setHasTasksIndex(index === hasTasksIndex ? null : index);
   };
@@ -32,32 +29,40 @@ const CalendarList = ({ tasks }) => {
     dateArr[i] = innerDate;
   }
 
-  const dateArrToString = dateArr.map(item => item.toISOString().slice(0, 10));
-
-  useEffect(() => {
-    // if (tasks.length > 0) {
-    dateArrToString.map(item => {
-      for (let i = 0; i < tasks.length; i++) {
-        const datesWithTasks = dateArrToString.filter(
-          d => d === tasks[i].dataBaseKey,
-        );
-        // console.log('datesWithTasks****', datesWithTasks);
-        datesWithTasks.map(a => {
-          if (a === tasks[i].dataBaseKey) {
-          }
-        });
-        if (tasks[i].isDone === false) {
-          // console.log('tasks[i].isDone === false**** ', tasks[i].isDone === true);
-          setShowFirstDot(true);
-        }
-      }
-    });
-    // }
-  }, [dateArr, tasks]);
-
   const changeDayHandler = day => {
     dispatch(changeCalendarDay(day));
     dispatch(fetchTasks(day));
+  };
+
+  const dateHasTasks = date => {
+    return tasks.some(task => task.dataBaseKey === date);
+  };
+
+  const renderIndicator = date => {
+    if (dateHasTasks(date)) {
+      const tasksOfTheDay = tasks.filter(task => task.dataBaseKey === date);
+      if (tasksOfTheDay.every(item => item.isDone === true)) {
+        return (
+          <div className="show-dots">
+            <div className="second-dot"> </div>
+          </div>
+        );
+      } else if (tasksOfTheDay.every(item => item.isDone === false)) {
+        return (
+          <div className="show-dots">
+            <div className="dot"> </div>
+          </div>
+        );
+      } else {
+        return (
+          <div className="show-dots">
+            <div className="dot"> </div>
+            <div className="second-dot"> </div>
+          </div>
+        );
+      }
+    }
+    return null;
   };
 
   return (
@@ -69,28 +74,10 @@ const CalendarList = ({ tasks }) => {
               item={item}
               key={item}
               changeDayHandler={changeDayHandler}
+              currentDay={item.toISOString().slice(0, 10) === date}
               isActive={hasTasksIndex === index}
               setIsActive={() => toggleEditHandler(index)}
-              showFirstDot={showFirstDot}
-              // showSecondDot={() => {
-              //   let current = item.toISOString().slice(0, 10);
-              //   console.log('current*******', current);
-              //   for (let i = 0; i < tasks.length; i++) {
-              //     if (current !== tasks[i].dataBaseKey) {
-              //       return false;
-              //     } else if (
-              //       current === tasks[i].dataBaseKey &&
-              //       tasks.includes(tasks[i].isDone === true)
-              //     ) {
-              //       return true;
-              //     } else if (
-              //       current === tasks[i].dataBaseKey &&
-              //       !tasks.includes(tasks[i].isDone === true)
-              //     ) {
-              //       return false;
-              //     }
-              //   }
-              // }}
+              hasTasks={() => renderIndicator(item.toISOString().slice(0, 10))}
             />
           ))}
         </div>
@@ -105,7 +92,6 @@ const CalendarList = ({ tasks }) => {
             defaultValue={date}
             min={date}
             onChange={event => {
-              //console.log('здесь послать запрос с новой датой', event.target.value);
               dispatch(changeCalendarDay(event.target.value));
               dispatch(fetchTasks(event.target.value));
             }}

@@ -55,3 +55,28 @@
 .task-desc {
   padding-left: 10px;
 }
+
+.changeForm {
+  max-width: 300px;
+  display: flex;
+  justify-content: space-between;
+}
+.changeForm_input {
+  outline: none;
+  border: 1px solid darkgrey;
+  border-radius: 4px;
+  height: 27px;
+  margin-top: 10px;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+
+.change-task-button {
+  margin-top: 10px;
+  color: white;
+  width: 170px;
+  height: 30px;
+  background-color: orange;
+  border: 1px solid orange;
+  border-radius: 3px;
+}

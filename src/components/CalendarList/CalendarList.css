@@ -1,37 +1,53 @@
 .calendar {
-    display: flex;
-    flex-direction: row;
-    /* overflow: scroll; */
-    width: 100%;
-    align-items: flex-start;
-    padding-left: 30px;
-    margin: 0;
-    /* border: 1px solid red; */
-    /* scrollbar-width: thin;
+  display: flex;
+  flex-direction: row;
+  /* overflow: scroll; */
+  width: 100%;
+  align-items: flex-start;
+  padding-left: 30px;
+  margin: 0;
+  /* border: 1px solid red; */
+  /* scrollbar-width: thin;
     scrollbar-color: red; */
-  }
-  /* input[type='date'] {
+}
+/* input[type='date'] {
     background-color: red;
     outline: none;
     display: flex;
   } */
-  
-  .calendar-item {
-    width: 98%;
-    height: auto;
-    display: flex;
-    flex-wrap: nowrap;
-    /* overflow: visible; */
-    overflow-x: scroll;
-    /* border: 1px solid blue; */
-  }
-  .calendar-item::-webkit-scrollbar {
-    padding-top: 10px;
-    height: 10px;
-  }
-  
-  .calendar-item::-webkit-scrollbar-thumb {
-    background-color: orange;
-    border-radius: 10px;
-  }
-  
+
+.calendar-item {
+  width: 98%;
+  height: auto;
+  display: flex;
+  flex-wrap: nowrap;
+  /* overflow: visible; */
+  overflow-x: scroll;
+  /* border: 1px solid blue; */
+}
+.calendar-item::-webkit-scrollbar {
+  padding-top: 10px;
+  height: 10px;
+}
+
+.calendar-item::-webkit-scrollbar-thumb {
+  background-color: orange;
+  border-radius: 10px;
+}
+.dot {
+  margin: 20px 10px 0;
+  width: 6px;
+  height: 6px;
+  background-color: orange;
+  border-radius: 10px;
+}
+.second-dot {
+  margin: 20px 10px 0;
+  width: 6px;
+  height: 6px;
+  background-color: rgb(245, 204, 129);
+  border-radius: 10px;
+}
+.show-dots {
+  display: flex;
+}

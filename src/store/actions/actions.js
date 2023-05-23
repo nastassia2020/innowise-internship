@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
-import { useSelector } from 'react-redux';
 import authSlice from '../slices/authSlice';
 import mainSlice from '../slices/mainSlice';
 
@@ -20,11 +19,9 @@ export const {
   addNewTaskHandler,
   taskIsDoneHandler,
   isDoneCheckHandler,
-  // taskChangeHandler,
   mainErrorHandler,
   showCalendarHandler,
   changeCalendarDay,
-  // deleteTaskHandler,
   clearTasksWhenLogOut,
 } = mainSlice.actions;
 
@@ -67,7 +64,6 @@ export const signInFetch = someData => {
             .then(res => {
               dispatch(setDataBaseKey(res.data.name));
               dispatch(clearErrorHandler());
-              //console.log('здесь должны занулить ошибку ');
               dispatch(firstLoadHandler(false));
             })
             .catch(err =>
@@ -80,7 +76,6 @@ export const signInFetch = someData => {
 };
 
 export const loginFetch = someData => {
-  console.log(`нажали на кнопку логирования`);
   return dispatch => {
     const { email, password } = someData;
     axios
@@ -111,9 +106,8 @@ export const loginFetch = someData => {
 // день по умолчанию сегодняшнее число
 const defaultDay = new Date(Date.now()).toISOString().slice(0, 10);
 
-export const fetchTasks = (date = defaultDay) => {
+export const fetchTasks = () => {
   let dataBaseKey = JSON.parse(localStorage.getItem('data'));
-  console.log('сработал fetch tasks ', date);
   return dispatch => {
     axios
       .get(
@@ -165,7 +159,6 @@ export const fetchTasks = (date = defaultDay) => {
 export const changeTaskPatch = (item, date = defaultDay) => {
   const userDataBaseKey = JSON.parse(localStorage.getItem('data'));
   const { uniqCode, description, id, dataBaseKey } = item;
-  console.log(item, 'item was changed****');
   return dispatch => {
     // сначала изменения в базе данных
     axios
@@ -191,8 +184,6 @@ export const changeTaskPatch = (item, date = defaultDay) => {
 
 export const taskIsDonePatch = (item, date = defaultDay) => {
   const userDataBaseKey = JSON.parse(localStorage.getItem('data'));
-  console.log(item, 'item   taskIsDonePatch');
-
   const { uniqCode, isDone, id } = item;
   return dispatch => {
     // сначала изменения в базе данных
@@ -205,7 +196,6 @@ export const taskIsDonePatch = (item, date = defaultDay) => {
       )
       .then(() => {
         // потом в локал сторадж
-        //const task = localStorage.getItem(`${item.description}`);
         localStorage.setItem(
           `${item.description}`,
           JSON.stringify({
@@ -250,7 +240,6 @@ export const deleteTask = (item, date = defaultDay) => {
       .then(() => {
         localStorage.removeItem(`${description}`);
         dispatch(fetchTasks(date));
-        console.log('task was deleted');
       })
       .catch(err => dispatch(mainErrorHandler(err.response.data.message)));
   };
