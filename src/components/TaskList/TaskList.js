@@ -40,19 +40,6 @@ const TaskList = ({ tasks }) => {
     setShowModal(index === editIndex ? null : index);
   };
 
-  // const openDeleteModal = () => {
-  //   setShowModal(true);
-  // }
-
-  function handleConfirm() {
-    // process deletion
-    setShowModal(false);
-  }
-
-  function handleCancel() {
-    setShowModal(false);
-  }
-
   return (
     <div className="task-list">
       <p> You have {tasks.length} tasks </p>
