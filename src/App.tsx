@@ -2,6 +2,7 @@ import './App.css'
 import { Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
+import DrawingsList from './Components/DrawingList/DrawingList'
 import ErrorBoundary from './features/ErrorBoundary/ErrorBoundary'
 import LoginPage from './pages/LoginPage/LoginPage'
 import MainPage from './pages/MainPage/MainPage'
@@ -20,6 +21,7 @@ function App() {
                   <Route path='/' element={<MainPage />} />
                   <Route path='/register' element={<RegisterPage />} />
                   <Route path='/login' element={<LoginPage />} />
+                  <Route path='/drawings' element={<DrawingsList />} />
                 </>
               ) : (
                 <>

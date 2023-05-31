@@ -1,0 +1,11 @@
+.main-page {
+  background: gray;
+  width: 100vw;
+  height: 100vh;
+}
+
+.canvas {
+  cursor: pointer;
+  margin-top: 15px;
+  background: white;
+}

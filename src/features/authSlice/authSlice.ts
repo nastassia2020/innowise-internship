@@ -40,7 +40,7 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ email, password }: { email: string; password: string }) => {
     const response = await LoginFetch({ email, password })()
-    localStorage.setItem('Auth uid', response.uid || '')
+    //localStorage.setItem('Auth uid', response.uid || '')
     console.log(response)
     return response
   },
@@ -56,7 +56,7 @@ export const authSlice = createSlice({
   reducers: {
     loginHandler: (state, action: PayloadAction<RegisterUserArgs | RegisterUserResponse>) => {
       state.user = action.payload
-      console.log('loginHandler', action.payload)
+      console.log('loginHandler', state.user)
       localStorage.setItem('user', JSON.stringify(state.user))
     },
     logoutHandler: (state) => {
