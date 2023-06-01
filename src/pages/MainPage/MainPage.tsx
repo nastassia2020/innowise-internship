@@ -1,18 +1,25 @@
 import { useState } from 'react'
 
+import { useNavigate } from 'react-router-dom'
+
 import Canvas from '../../Components/Canvas/Canvas'
 import './MainPage.css'
 
 const MainPage = () => {
   const [strokeStyle, setStrokeStyle] = useState('#000000')
   const [lineWidth, setLineWidth] = useState(1)
+  const navigate = useNavigate()
 
   return (
     <div className='main-page'>
+      <button className='my-collection-btn' type='button' title='My collection' onClick={() => navigate('/drawings')}>
+        {' '}
+        MY COLLECTION
+      </button>
       <Canvas width={1000} height={600} design={'canvas'} lineWidth={lineWidth} strokeStyle={strokeStyle} />
-      <form>
+      <form className='color-width-options'>
         <label htmlFor='color' title='Color'>
-          Color
+          Choose color
         </label>
         <input
           type='color'
@@ -20,7 +27,7 @@ const MainPage = () => {
           onChange={(e) => setStrokeStyle(e.target.value)}
           placeholder='Choose your color'
         />
-        <label htmlFor='lineWidth'>Choose line Width: </label>
+        <label htmlFor='lineWidth'>Choose line width: </label>
         <input
           type='range'
           name='lineWidth'

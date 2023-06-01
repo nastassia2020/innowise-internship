@@ -13,8 +13,11 @@ export interface RegisterUserResponse {
 }
 
 export interface UserState {
+  login: string | null
   user: RegisterUserArgs | RegisterUserResponse | null
   status: 'idle' | 'loading' | 'failed'
+  firstEnter: boolean
+  isAuth: boolean
 }
 
 const initialState: UserState = {
@@ -23,15 +26,20 @@ const initialState: UserState = {
     password: '',
     uid: '',
   },
+  login: '',
+  isAuth: false,
   status: 'idle',
+  firstEnter: true,
 }
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
-  async ({ email, password }: { email: string; password: string }) => {
+  async ({ login, email, password }: { login: string; email: string; password: string }) => {
     const response = await createUserFetch({ email, password })()
     console.log(response)
-    localStorage.setItem('Auth uid', response.uid || '')
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
+    users.push({ name: login, uid: response.uid })
+    localStorage.setItem('users', JSON.stringify(users))
     return response
   },
 )
@@ -40,7 +48,7 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ email, password }: { email: string; password: string }) => {
     const response = await LoginFetch({ email, password })()
-    //localStorage.setItem('Auth uid', response.uid || '')
+    localStorage.setItem('Auth uid', response.uid || '')
     console.log(response)
     return response
   },
@@ -54,13 +62,27 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    registerUserHandler: (state, action: PayloadAction<string>) => {
+      state.login = action.payload
+    },
     loginHandler: (state, action: PayloadAction<RegisterUserArgs | RegisterUserResponse>) => {
       state.user = action.payload
+      state.isAuth = true
       console.log('loginHandler', state.user)
-      localStorage.setItem('user', JSON.stringify(state.user))
+    },
+    loginCheckStatusHandler: (state, action: PayloadAction<boolean>) => {
+      const user = localStorage.getItem('Auth uid') || ''
+      if (user) {
+        state.isAuth = action.payload
+      }
     },
     logoutHandler: (state) => {
       state.user = null
+      state.isAuth = false
+      localStorage.removeItem('Auth uid')
+    },
+    firstLoadHandler: (state, action: PayloadAction<boolean>) => {
+      state.firstEnter = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -98,6 +120,7 @@ export const authSlice = createSlice({
   },
 })
 
-export const { loginHandler, logoutHandler } = authSlice.actions
+export const { loginHandler, logoutHandler, firstLoadHandler, registerUserHandler, loginCheckStatusHandler } =
+  authSlice.actions
 
 export default authSlice.reducer

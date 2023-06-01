@@ -1,40 +1,67 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppDispatch } from '../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 
-import { registerUser } from '../../features/authSlice/authSlice'
+import { registerUser, firstLoadHandler, registerUserHandler } from '../../features/authSlice/authSlice'
 import './RegisterPage.css'
 
 interface Props {}
 
 const RegisterPage: React.FC<Props> = () => {
+  const { firstEnter } = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [userData, setUserData] = useState({
+    login: '',
+    email: '',
+    password: '',
+  })
+
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData({ ...userData, [event.target.name]: event.target.value })
+  }
+
+  useEffect(() => {
+    if (firstEnter === false) {
+      navigate('/login')
+    }
+  }, [firstEnter, navigate])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(registerUser({ email, password }))
+    dispatch(registerUser(userData))
+    registerUserHandler(userData.login)
+    dispatch(firstLoadHandler(false))
     navigate('/login')
-    console.log(email, password)
+    console.log(userData)
   }
 
   return (
     <div className='auth'>
       <form className='auth_form' onSubmit={handleSubmit}>
+        <label htmlFor='login' title='Login'>
+          Login:{' '}
+        </label>
+        <input
+          type='text'
+          name='login'
+          value={userData.login}
+          placeholder='Enter your login'
+          required
+          onChange={changeHandler}
+        />
         <label htmlFor='email' title='Email'>
           Email:{' '}
         </label>
         <input
           type='email'
           name='email'
-          value={email}
+          value={userData.email}
           placeholder='example@domain.com'
           required
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={changeHandler}
         />
         <label htmlFor='password' title='Password'>
           Password:{' '}
@@ -42,9 +69,9 @@ const RegisterPage: React.FC<Props> = () => {
         <input
           type='password'
           name='password'
-          value={password}
+          value={userData.password}
           placeholder='Min 6 characters'
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={changeHandler}
           required
         />
         <button type='submit' className='auth_btn'>

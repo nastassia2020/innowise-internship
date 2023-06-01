@@ -1,42 +1,26 @@
-.main-page {
-  background: gray;
-  width: 100vw;
-  height: 100vh;
-}
-
-.canvas {
-  cursor: pointer;
-  margin-top: 15px;
-  background: white;
-}
-
-.color-width-options {
+.canvas-form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: absolute;
-  top: 120px;
+  top: 280px;
   left: 20px;
   bottom: 300px;
   right: 1000px;
   width: 200px;
-  height: 150px;
+  height: 250px;
   align-items: flex-start;
   color: white;
 }
 
-.color-width-options output {
-  margin-left: 60px;
-}
-
-.my-collection-btn {
+.save-image-btn {
   background: orchid;
   width: 110px;
   height: 40px;
   position: absolute;
-  top: 50px;
+  top: 550px;
   left: 20px;
-  bottom: 280px;
+  bottom: 0px;
   right: 1100px;
   border: none;
   cursor: pointer;

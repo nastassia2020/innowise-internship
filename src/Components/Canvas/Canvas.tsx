@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { saveDrawing } from '../../features/drawings/drawingsApi'
+import './Canvas.css'
 
 export interface DrawingData {
   dataURL: string
@@ -21,7 +22,9 @@ const Canvas = ({
   lineWidth: number
 }) => {
   const [isDrawing, setIsDrawing] = useState(false)
-  const [drawingMode, setDrawingMode] = useState<'line' | 'brush' | 'circle' | 'rectangle' | 'triangle'>('line')
+  const [drawingMode, setDrawingMode] = useState<
+    'straight line' | 'line' | 'brush' | 'circle' | 'rectangle' | 'triangle'
+  >('line')
   const [startPos, setStartPos] = useState({ x: 0, y: 0 })
   const [canvasRef, setCanvasRef] = useState<HTMLCanvasElement | null>(null)
 
@@ -66,6 +69,8 @@ const Canvas = ({
     (event: MouseEvent) => {
       setIsDrawing(false)
       const canvas = canvasRef
+      const x = event.offsetX
+      const y = event.offsetY
       if (!canvas) {
         return
       }
@@ -75,7 +80,15 @@ const Canvas = ({
         return
       }
 
-      if (drawingMode === 'circle') {
+      if (drawingMode === 'straight line') {
+        context.strokeStyle = strokeStyle
+        context.lineWidth = lineWidth
+        context.beginPath()
+        context.moveTo(startPos.x, startPos.y)
+        context.lineTo(x, y)
+        context.stroke()
+        setStartPos({ x, y })
+      } else if (drawingMode === 'circle') {
         const r = Math.sqrt(Math.pow(startPos.x - event.offsetX, 2) + Math.pow(startPos.y - event.offsetY, 2))
         context.beginPath()
         context.arc(startPos.x, startPos.y, r, 0, 2 * Math.PI, false)
@@ -142,10 +155,11 @@ const Canvas = ({
   return (
     <>
       <canvas ref={setCanvasRef} width={width} height={height} className={design} style={canvasStyle} />
-      <button type='button' onClick={handleSaveDrawing}>
-        Save and upload image
+      <button className='save-image-btn' type='button' onClick={handleSaveDrawing}>
+        SAVE IMAGE
       </button>
-      <div>
+      <form className='canvas-form'>
+        <p>Choose drawing option:</p>
         <label>
           <input
             type='radio'
@@ -165,6 +179,16 @@ const Canvas = ({
             onChange={() => setDrawingMode('brush')}
           />
           Brush
+        </label>
+        <label>
+          <input
+            type='radio'
+            name='drawing-mode'
+            value='straight line'
+            checked={drawingMode === 'straight line'}
+            onChange={() => setDrawingMode('straight line')}
+          />
+          Straight line
         </label>
         <label>
           <input
@@ -196,7 +220,7 @@ const Canvas = ({
           />
           Triangle
         </label>
-      </div>
+      </form>
     </>
   )
 }

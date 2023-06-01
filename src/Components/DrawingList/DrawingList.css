@@ -1,0 +1,28 @@
+.drawings-list {
+  margin: 0 auto;
+  background: gray;
+  width: 100vw;
+  height: 100vh;
+}
+
+.drawing {
+  background: white;
+  width: 250px;
+  height: 150px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.drawings-list-btn {
+  background: orchid;
+  width: 90px;
+  height: 50px;
+  position: absolute;
+  top: 70px;
+  left: 10px;
+  bottom: 280px;
+  right: 1100px;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
