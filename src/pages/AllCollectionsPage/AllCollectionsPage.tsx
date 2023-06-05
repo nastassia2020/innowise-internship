@@ -34,6 +34,13 @@ function AllCollectionsPage() {
       .map(({ drawingData }) => drawingData.dataURL),
   }))
 
+  // const usersCollections = collections.collections.map(({ uid }) => ({
+  //   uid,
+  //   data: collections.collections.map(({ drawingData }) => drawingData.dataURL),
+  // }))
+
+  console.log(collections.collections)
+
   const filteredUsers = usersCollections.filter((user) => user.name.includes(search))
 
   return (
@@ -42,14 +49,20 @@ function AllCollectionsPage() {
       <button className='drawings-list-btn' type='button' onClick={() => navigate('/')}>
         Return to canvas
       </button>
-      <input type='text' title='search' placeholder='Enter user name' onChange={changeHandler} />
+      <input
+        type='text'
+        title='search'
+        placeholder='Enter user name'
+        onChange={changeHandler}
+        className='search-input'
+      />
 
       {search.length && filteredUsers
         ? filteredUsers.map((user) => (
             <>
               <p key={user.name}>{user.name}</p>
               <div className='drawing-collection'>
-                {user.data.map((drawing) => (
+                {user.data.slice(-4).map((drawing) => (
                   <img className='drawing' key={user.name} src={drawing} alt={`Drawing ${drawing}`} />
                 ))}
               </div>
@@ -59,7 +72,7 @@ function AllCollectionsPage() {
             <>
               <p key={user.name}>{user.name}</p>
               <div className='drawing-collection'>
-                {user.data.map((drawing) => (
+                {user.data.slice(-4).map((drawing) => (
                   <img className='drawing' key={user.name} src={drawing} alt={`Drawing ${drawing}`} />
                 ))}
               </div>
