@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../app/hooks'
 
-import { loginUser, loginHandler, loginCheckStatusHandler } from '../../features/authSlice/authSlice'
+import { loginUser, loginHandler } from '../../features/authSlice/authSlice'
 
 interface Props {}
 
@@ -19,7 +19,6 @@ const LoginPage: React.FC<Props> = () => {
     e.preventDefault()
     dispatch(loginUser({ email, password }))
     dispatch(loginHandler({ email, password }))
-    dispatch(loginCheckStatusHandler(true))
     navigate('/')
     console.log(email, password)
   }

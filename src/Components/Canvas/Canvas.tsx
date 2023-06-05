@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 
 import { saveDrawing } from '../../features/drawings/drawingsApi'
 import './Canvas.css'
@@ -27,6 +27,17 @@ const Canvas = ({
   >('line')
   const [startPos, setStartPos] = useState({ x: 0, y: 0 })
   const [canvasRef, setCanvasRef] = useState<HTMLCanvasElement | null>(null)
+  const [strokes, setStrokes] = useState<ImageData[]>([])
+
+  // const strokes: ImageData[] = useMemo(() => [], [])
+
+  useEffect(() => {
+    clearStrokes()
+  }, [])
+
+  const clearStrokes = () => {
+    setStrokes([])
+  }
 
   const handleCanvasMouseMove = useCallback(
     (event: MouseEvent) => {
@@ -56,8 +67,12 @@ const Canvas = ({
         context.fillRect(x - 5, y - 5, lineWidth, lineWidth)
         context.fill()
       }
+
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+      strokes.push(imageData)
+      console.log('strokes from lines', strokes)
     },
-    [canvasRef, drawingMode, isDrawing, lineWidth, startPos.x, startPos.y, strokeStyle],
+    [canvasRef, drawingMode, isDrawing, lineWidth, startPos.x, startPos.y, strokeStyle, strokes],
   )
 
   const handleCanvasMouseDown = useCallback((event: MouseEvent) => {
@@ -113,8 +128,12 @@ const Canvas = ({
         context.lineWidth = lineWidth
         context.stroke()
       }
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+      strokes.push(imageData)
+
+      console.log('strokes from circle', strokes)
     },
-    [canvasRef, drawingMode, setIsDrawing, startPos.x, startPos.y, lineWidth, strokeStyle],
+    [canvasRef, drawingMode, setIsDrawing, startPos.x, startPos.y, lineWidth, strokeStyle, strokes],
   )
 
   useEffect(() => {
@@ -139,24 +158,70 @@ const Canvas = ({
   const uid = localStorage.getItem('Auth uid')
 
   async function handleSaveDrawing() {
-    // Get the drawing data from the canvas
     const drawingData = canvasRef?.toDataURL()
-
-    // Save the drawing to Firebase
     if (drawingData) {
       const drawingId = await saveDrawing(uid, { dataURL: drawingData })
-
+      if (drawingId) {
+        alert('Drawing saved')
+      }
       console.log(`Drawing saved with ID ${drawingId}`)
     }
+  }
 
-    console.log('drawingData', drawingData)
+  const undoneStrokes: ImageData[] = []
+
+  const handleUndo = (canvasRef: HTMLCanvasElement | null, strokes: ImageData[], undoneStrokes: ImageData[]) => {
+    const canvas = canvasRef
+    if (!canvas) {
+      return
+    }
+
+    const context = canvas.getContext('2d')
+    if (!context) {
+      return
+    }
+
+    const lastStroke = strokes.pop()
+    if (lastStroke) {
+      undoneStrokes.push(lastStroke)
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      strokes.forEach((stroke) => {
+        context.putImageData(stroke, 0, 0)
+      })
+    }
+
+    console.log('lastStroke*****', strokes)
+    console.log('canvasRef*****', canvasRef)
+  }
+
+  const handleClearCanvas = () => {
+    const canvas = canvasRef
+    if (!canvas) {
+      return
+    }
+
+    const context = canvas.getContext('2d')
+    if (!context) {
+      return
+    }
+    const stroke = context.getImageData(0, 0, canvas.width, canvas.height)
+    strokes.push(stroke)
+    context.clearRect(0, 0, canvas.width, canvas.height)
+
+    clearStrokes()
   }
 
   return (
     <>
       <canvas ref={setCanvasRef} width={width} height={height} className={design} style={canvasStyle} />
-      <button className='save-image-btn' type='button' onClick={handleSaveDrawing}>
+      <button className='image-btn save' type='button' onClick={handleSaveDrawing}>
         SAVE IMAGE
+      </button>
+      <button className='image-btn clear' type='button' onClick={handleClearCanvas}>
+        Clear Canvas
+      </button>
+      <button className='image-btn cancel' type='button' onClick={() => handleUndo(canvasRef, strokes, undoneStrokes)}>
+        Cancel
       </button>
       <form className='canvas-form'>
         <p>Choose drawing option:</p>

@@ -13,16 +13,33 @@
   color: white;
 }
 
-.save-image-btn {
+.image-btn {
   background: orchid;
   width: 110px;
   height: 40px;
   position: absolute;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.save {
   top: 550px;
   left: 20px;
   bottom: 0px;
   right: 1100px;
-  border: none;
-  cursor: pointer;
-  color: white;
+}
+
+.clear {
+  top: 110px;
+  left: 1300px;
+  bottom: 300px;
+  right: 20px;
+}
+
+.cancel {
+  top: 50px;
+  left: 1300px;
+  bottom: 300px;
+  right: 20px;
 }

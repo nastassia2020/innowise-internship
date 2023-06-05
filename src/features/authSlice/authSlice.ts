@@ -70,10 +70,10 @@ export const authSlice = createSlice({
       state.isAuth = true
       console.log('loginHandler', state.user)
     },
-    loginCheckStatusHandler: (state, action: PayloadAction<boolean>) => {
-      const user = localStorage.getItem('Auth uid') || ''
-      if (user) {
-        state.isAuth = action.payload
+    loginCheckStatusHandler: (state) => {
+      const uid = localStorage.getItem('Auth uid') || null
+      if (uid) {
+        state.isAuth = true
       }
     },
     logoutHandler: (state) => {

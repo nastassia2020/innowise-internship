@@ -1,7 +1,7 @@
 .main-page {
   background: gray;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 }
 
 .canvas {
@@ -29,16 +29,26 @@
   margin-left: 60px;
 }
 
-.my-collection-btn {
+.collection-btn {
   background: orchid;
   width: 110px;
   height: 40px;
   position: absolute;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.my-collection {
   top: 50px;
   left: 20px;
   bottom: 280px;
   right: 1100px;
-  border: none;
-  cursor: pointer;
-  color: white;
+}
+
+.all-collections {
+  top: 50px;
+  left: 140px;
+  bottom: 280px;
+  right: 1000px;
 }

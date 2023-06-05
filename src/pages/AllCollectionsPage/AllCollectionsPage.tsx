@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -17,6 +17,11 @@ function AllCollectionsPage() {
   const dispatch = useAppDispatch()
   const collections = useAppSelector((state) => state.userCollections)
   const registeredUsers: StoredUser[] = JSON.parse(localStorage.getItem('users') || '[]')
+  const [search, setSearch] = useState('')
+
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value)
+  }
 
   useEffect(() => {
     dispatch(getAllCollections())
@@ -29,8 +34,7 @@ function AllCollectionsPage() {
       .map(({ drawingData }) => drawingData.dataURL),
   }))
 
-  console.log(usersCollections)
-  console.log('*********', collections.collections)
+  const filteredUsers = usersCollections.filter((user) => user.name.includes(search))
 
   return (
     <div className='drawings-list'>
@@ -38,14 +42,29 @@ function AllCollectionsPage() {
       <button className='drawings-list-btn' type='button' onClick={() => navigate('/')}>
         Return to canvas
       </button>
-      {usersCollections.map((user) => (
-        <>
-          <p>{user.name}</p>
-          {user.data.map((drawing) => (
-            <img className='drawing' key={user.name} src={drawing} alt={`Drawing ${drawing}`} />
+      <input type='text' title='search' placeholder='Enter user name' onChange={changeHandler} />
+
+      {search.length && filteredUsers
+        ? filteredUsers.map((user) => (
+            <>
+              <p key={user.name}>{user.name}</p>
+              <div className='drawing-collection'>
+                {user.data.map((drawing) => (
+                  <img className='drawing' key={user.name} src={drawing} alt={`Drawing ${drawing}`} />
+                ))}
+              </div>
+            </>
+          ))
+        : usersCollections.map((user) => (
+            <>
+              <p key={user.name}>{user.name}</p>
+              <div className='drawing-collection'>
+                {user.data.map((drawing) => (
+                  <img className='drawing' key={user.name} src={drawing} alt={`Drawing ${drawing}`} />
+                ))}
+              </div>
+            </>
           ))}
-        </>
-      ))}
     </div>
   )
 }

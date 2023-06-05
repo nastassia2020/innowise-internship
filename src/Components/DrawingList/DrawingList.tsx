@@ -27,7 +27,6 @@ function DrawingsList() {
       <button className='drawings-list-btn' type='button' onClick={() => navigate('/')}>
         Return to canvas
       </button>
-      <button onClick={() => navigate('/allcollections')}>See collections of all users</button>
       {drawings.map((drawing) => (
         <img className='drawing' key={drawing.id} src={drawing.dataURL} alt={`Drawing ${drawing.id}`} />
       ))}

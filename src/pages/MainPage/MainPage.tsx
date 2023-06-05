@@ -12,9 +12,17 @@ const MainPage = () => {
 
   return (
     <div className='main-page'>
-      <button className='my-collection-btn' type='button' title='My collection' onClick={() => navigate('/drawings')}>
+      <button
+        className='collection-btn my-collection'
+        type='button'
+        title='My collection'
+        onClick={() => navigate('/drawings')}
+      >
         {' '}
         MY COLLECTION
+      </button>
+      <button className='collection-btn all-collections' type='button' onClick={() => navigate('/allcollections')}>
+        ALL USERS COLLECTION
       </button>
       <Canvas width={1000} height={600} design={'canvas'} lineWidth={lineWidth} strokeStyle={strokeStyle} />
       <form className='color-width-options'>

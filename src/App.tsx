@@ -6,7 +6,6 @@ import { useAppSelector, useAppDispatch } from './app/hooks'
 import DrawingsList from './Components/DrawingList/DrawingList'
 import Header from './Components/Header/Header'
 import { loginCheckStatusHandler } from './features/authSlice/authSlice'
-import { getDrawings } from './features/drawings/DrawingsSlice'
 import ErrorBoundary from './features/ErrorBoundary/ErrorBoundary'
 import AllCollectionsPage from './pages/AllCollectionsPage/AllCollectionsPage'
 import LoginPage from './pages/LoginPage/LoginPage'
@@ -18,12 +17,15 @@ function App() {
   if (!users.length) {
     localStorage.setItem('users', JSON.stringify([]))
   }
-  const { isAuth } = useAppSelector((state) => state.auth)
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    dispatch(loginCheckStatusHandler(true))
-  }, [dispatch])
+  // const { isAuth } = useAppSelector((state) => state.auth)
+
+  // useEffect(() => {
+  //   dispatch(loginCheckStatusHandler())
+  // }, [dispatch, isAuth])
+
+  const isAuth = localStorage.getItem('Auth uid')
 
   return (
     <div className='App'>
@@ -39,7 +41,6 @@ function App() {
                   <Route path='/login' element={<LoginPage />} />
                   <Route path='/drawings' element={<DrawingsList />} />
                   <Route path='/allcollections' element={<AllCollectionsPage />} />
-                  {/* <Route path='/' element={<Navigate replace to='/drawings' />} /> */}
                 </>
               ) : (
                 <>
