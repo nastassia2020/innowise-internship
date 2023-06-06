@@ -13,19 +13,15 @@ import MainPage from './pages/MainPage/MainPage'
 import RegisterPage from './pages/RegisterPage/RegisterPage'
 
 function App() {
-  const users = JSON.parse(localStorage.getItem('users') || '[]')
-  if (!users.length) {
-    localStorage.setItem('users', JSON.stringify([]))
-  }
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
-  // const { isAuth } = useAppSelector((state) => state.auth)
+  const { isAuth } = useAppSelector((state) => state.auth)
 
-  // useEffect(() => {
-  //   dispatch(loginCheckStatusHandler())
-  // }, [dispatch, isAuth])
+  useEffect(() => {
+    dispatch(loginCheckStatusHandler())
+  }, [dispatch, isAuth])
 
-  const isAuth = localStorage.getItem('Auth uid')
+  // const isAuth = localStorage.getItem('Auth uid')
 
   return (
     <div className='App'>

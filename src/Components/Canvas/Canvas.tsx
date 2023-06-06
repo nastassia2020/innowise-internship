@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { saveDrawing } from '../../features/drawings/drawingsApi'
 import './Canvas.css'
@@ -70,7 +70,6 @@ const Canvas = ({
 
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
       strokes.push(imageData)
-      console.log('strokes from lines', strokes)
     },
     [canvasRef, drawingMode, isDrawing, lineWidth, startPos.x, startPos.y, strokeStyle, strokes],
   )
@@ -130,8 +129,6 @@ const Canvas = ({
       }
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
       strokes.push(imageData)
-
-      console.log('strokes from circle', strokes)
     },
     [canvasRef, drawingMode, setIsDrawing, startPos.x, startPos.y, lineWidth, strokeStyle, strokes],
   )

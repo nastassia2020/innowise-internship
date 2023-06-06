@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 
-import { registerUser, firstLoadHandler, registerUserHandler } from '../../features/authSlice/authSlice'
+import { registerUser, firstLoadHandler } from '../../features/authSlice/authSlice'
 import './RegisterPage.css'
 
 interface Props {}
@@ -14,7 +14,6 @@ const RegisterPage: React.FC<Props> = () => {
   const navigate = useNavigate()
 
   const [userData, setUserData] = useState({
-    login: '',
     email: '',
     password: '',
   })
@@ -32,7 +31,6 @@ const RegisterPage: React.FC<Props> = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(registerUser(userData))
-    registerUserHandler(userData.login)
     dispatch(firstLoadHandler(false))
     navigate('/login')
     console.log(userData)
@@ -41,17 +39,6 @@ const RegisterPage: React.FC<Props> = () => {
   return (
     <div className='auth'>
       <form className='auth_form' onSubmit={handleSubmit}>
-        <label htmlFor='login' title='Login'>
-          Login:{' '}
-        </label>
-        <input
-          type='text'
-          name='login'
-          value={userData.login}
-          placeholder='Enter your login'
-          required
-          onChange={changeHandler}
-        />
         <label htmlFor='email' title='Email'>
           Email:{' '}
         </label>

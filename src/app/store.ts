@@ -1,6 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 
 import usersCollectionsSliceReducer from '../features/allCollections/AllCollectionsSlice'
+import userSliceReducer from '../features/allUsers/allUsersSlice'
 import authSliceReducer from '../features/authSlice/authSlice'
 import drawingsSliceReducer from '../features/drawings/DrawingsSlice'
 
@@ -9,6 +10,7 @@ export const store = configureStore({
     auth: authSliceReducer,
     drawings: drawingsSliceReducer,
     userCollections: usersCollectionsSliceReducer,
+    users: userSliceReducer,
   },
 })
 

@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { createUserFetch, LoginFetch, LogOutFetch } from './authAPI'
 
+import { saveUser } from '../allUsers/allUsersAPI'
+
 export interface RegisterUserArgs {
   email: string | null
   password: string | null
@@ -13,7 +15,6 @@ export interface RegisterUserResponse {
 }
 
 export interface UserState {
-  login: string | null
   user: RegisterUserArgs | RegisterUserResponse | null
   status: 'idle' | 'loading' | 'failed'
   firstEnter: boolean
@@ -26,7 +27,6 @@ const initialState: UserState = {
     password: '',
     uid: '',
   },
-  login: '',
   isAuth: false,
   status: 'idle',
   firstEnter: true,
@@ -34,12 +34,10 @@ const initialState: UserState = {
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
-  async ({ login, email, password }: { login: string; email: string; password: string }) => {
+  async ({ email, password }: { email: string; password: string }) => {
     const response = await createUserFetch({ email, password })()
     console.log(response)
-    const users = JSON.parse(localStorage.getItem('users') || '[]')
-    users.push({ name: login, uid: response.uid })
-    localStorage.setItem('users', JSON.stringify(users))
+    await saveUser(response.uid || '', response.email || '')
     return response
   },
 )
@@ -62,9 +60,6 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    registerUserHandler: (state, action: PayloadAction<string>) => {
-      state.login = action.payload
-    },
     loginHandler: (state, action: PayloadAction<RegisterUserArgs | RegisterUserResponse>) => {
       state.user = action.payload
       state.isAuth = true
@@ -120,7 +115,6 @@ export const authSlice = createSlice({
   },
 })
 
-export const { loginHandler, logoutHandler, firstLoadHandler, registerUserHandler, loginCheckStatusHandler } =
-  authSlice.actions
+export const { loginHandler, logoutHandler, firstLoadHandler, loginCheckStatusHandler } = authSlice.actions
 
 export default authSlice.reducer

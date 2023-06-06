@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { getAllCollections } from '../../features/allCollections/AllCollectionsSlice'
+import { getAllUsers } from '../../features/allUsers/allUsersSlice'
 
 import './AllCollectionsPage.css'
 
 export interface StoredUser {
-  name: string
+  email: string
   uid: string
 }
 
@@ -16,7 +17,7 @@ function AllCollectionsPage() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const collections = useAppSelector((state) => state.userCollections)
-  const registeredUsers: StoredUser[] = JSON.parse(localStorage.getItem('users') || '[]')
+  const usersFromDB = useAppSelector((state) => state.users)
   const [search, setSearch] = useState('')
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,23 +26,21 @@ function AllCollectionsPage() {
 
   useEffect(() => {
     dispatch(getAllCollections())
+    dispatch(getAllUsers())
   }, [dispatch])
 
-  const usersCollections = registeredUsers.map(({ name }) => ({
-    name,
+  console.log('usersFromDB******* ', usersFromDB)
+
+  const usersCollections = usersFromDB.users.map(({ email }) => ({
+    email,
     data: collections.collections
-      .filter(({ uid }) => uid === registeredUsers.find((user) => user.name === name)?.uid)
+      .filter(({ uid }) => uid === usersFromDB.users.find((user) => user.email === email)?.uid)
       .map(({ drawingData }) => drawingData.dataURL),
   }))
 
-  // const usersCollections = collections.collections.map(({ uid }) => ({
-  //   uid,
-  //   data: collections.collections.map(({ drawingData }) => drawingData.dataURL),
-  // }))
-
   console.log(collections.collections)
 
-  const filteredUsers = usersCollections.filter((user) => user.name.includes(search))
+  const filteredUsers = usersCollections.filter((user) => user.email.includes(search))
 
   return (
     <div className='drawings-list'>
@@ -60,20 +59,20 @@ function AllCollectionsPage() {
       {search.length && filteredUsers
         ? filteredUsers.map((user) => (
             <>
-              <p key={user.name}>{user.name}</p>
+              <p key={user.email}>{user.email}</p>
               <div className='drawing-collection'>
                 {user.data.slice(-4).map((drawing) => (
-                  <img className='drawing' key={user.name} src={drawing} alt={`Drawing ${drawing}`} />
+                  <img className='drawing' key={user.email} src={drawing} alt={`Drawing ${drawing}`} />
                 ))}
               </div>
             </>
           ))
         : usersCollections.map((user) => (
             <>
-              <p key={user.name}>{user.name}</p>
+              <p key={user.email}>{user.email}</p>
               <div className='drawing-collection'>
                 {user.data.slice(-4).map((drawing) => (
-                  <img className='drawing' key={user.name} src={drawing} alt={`Drawing ${drawing}`} />
+                  <img className='drawing' key={user.email} src={drawing} alt={`Drawing ${drawing}`} />
                 ))}
               </div>
             </>
