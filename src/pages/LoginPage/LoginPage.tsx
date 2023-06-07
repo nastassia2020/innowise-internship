@@ -20,7 +20,7 @@ const LoginPage: React.FC<Props> = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { isError, user } = useAppSelector((state) => state.auth)
+  const { isError } = useAppSelector((state) => state.auth)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -33,7 +33,6 @@ const LoginPage: React.FC<Props> = () => {
       dispatch(loginUser({ email, password }))
       dispatch(loginHandler({ email, password }))
       navigate('/')
-      console.log('user *****', user)
     }
   }
 

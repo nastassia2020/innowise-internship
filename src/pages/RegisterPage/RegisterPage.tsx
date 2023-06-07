@@ -35,7 +35,6 @@ const RegisterPage: React.FC<Props> = () => {
     } else {
       dispatch(registerUser(userData))
       navigate('/login')
-      console.log('isError', isError)
     }
   }
 

@@ -56,7 +56,6 @@ export const loginUser = createAsyncThunk(
       return response
     } catch (error) {
       toast.error("user doesn't exist")
-      console.log('something went wrong', error)
       throw error
     }
   },
@@ -73,7 +72,6 @@ export const authSlice = createSlice({
     loginHandler: (state, action: PayloadAction<RegisterUserArgs | RegisterUserResponse>) => {
       state.user = action.payload
       state.isAuth = true
-      console.log('loginHandler', state.user)
     },
     loginCheckStatusHandler: (state) => {
       const uid = localStorage.getItem('Auth uid') || null

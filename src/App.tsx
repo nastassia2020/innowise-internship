@@ -1,12 +1,11 @@
 import './App.css'
-import { Suspense, useEffect } from 'react'
+import { Suspense } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
-import { useAppSelector, useAppDispatch } from './app/hooks'
+import { useAppSelector } from './app/hooks'
 import DrawingsList from './Components/DrawingList/DrawingList'
 import Header from './Components/Header/Header'
-import { loginCheckStatusHandler } from './features/authSlice/authSlice'
 import ErrorBoundary from './features/ErrorBoundary/ErrorBoundary'
 import AllCollectionsPage from './pages/AllCollectionsPage/AllCollectionsPage'
 import LoginPage from './pages/LoginPage/LoginPage'
@@ -14,13 +13,7 @@ import MainPage from './pages/MainPage/MainPage'
 import RegisterPage from './pages/RegisterPage/RegisterPage'
 
 function App() {
-  const dispatch = useAppDispatch()
-
   const { isAuth, isError } = useAppSelector((state) => state.auth)
-
-  console.log('isAuth////', isAuth)
-  console.log('isError////', isError)
-  // const isAuth = localStorage.getItem('Auth uid')
 
   return (
     <div className='App'>
