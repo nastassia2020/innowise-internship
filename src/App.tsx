@@ -1,5 +1,6 @@
 import './App.css'
 import { Suspense, useEffect } from 'react'
+import { Toaster } from 'react-hot-toast'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import { useAppSelector, useAppDispatch } from './app/hooks'
@@ -15,22 +16,21 @@ import RegisterPage from './pages/RegisterPage/RegisterPage'
 function App() {
   const dispatch = useAppDispatch()
 
-  const { isAuth } = useAppSelector((state) => state.auth)
+  const { isAuth, isError } = useAppSelector((state) => state.auth)
 
-  useEffect(() => {
-    dispatch(loginCheckStatusHandler())
-  }, [dispatch, isAuth])
-
+  console.log('isAuth////', isAuth)
+  console.log('isError////', isError)
   // const isAuth = localStorage.getItem('Auth uid')
 
   return (
     <div className='App'>
       <Header />
+      <Toaster position='top-left' />
       <ErrorBoundary>
         <Suspense fallback={<h1> ...</h1>}>
           <BrowserRouter>
             <Routes>
-              {isAuth ? (
+              {isAuth && !isError ? (
                 <>
                   <Route path='/' element={<MainPage />} />
                   <Route path='/register' element={<RegisterPage />} />
@@ -44,6 +44,7 @@ function App() {
                   <Route path='/login' element={<LoginPage />} />
                   <Route path='/' element={<Navigate replace to='/register' />} />
                   <Route path='/drawings' element={<Navigate replace to='/register' />} />
+                  <Route path='/allcollections' element={<Navigate replace to='/register' />} />
                 </>
               )}
             </Routes>

@@ -2,7 +2,7 @@ import { SlLogout } from 'react-icons/sl'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 
-import { logoutHandler, firstLoadHandler } from '../../features/authSlice/authSlice'
+import { logoutHandler } from '../../features/authSlice/authSlice'
 import './Header.css'
 
 const Header = () => {
@@ -11,8 +11,6 @@ const Header = () => {
 
   const authHandler = () => {
     dispatch(logoutHandler())
-    // добавила переменную firstload, чтобы при разлогинивании не перекидывал useEffect компонента Sign на страницу login
-    dispatch(firstLoadHandler(true))
   }
 
   return (

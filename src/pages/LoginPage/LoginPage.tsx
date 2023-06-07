@@ -2,9 +2,15 @@ import React, { useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
-import { useAppDispatch } from '../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 
-import { loginUser, loginHandler } from '../../features/authSlice/authSlice'
+import {
+  loginUser,
+  loginHandler,
+  checkUserHandler,
+  loginCheckStatusHandler,
+  clearErrorHandler,
+} from '../../features/authSlice/authSlice'
 
 interface Props {}
 
@@ -14,13 +20,21 @@ const LoginPage: React.FC<Props> = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { isError, user } = useAppSelector((state) => state.auth)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(loginUser({ email, password }))
-    dispatch(loginHandler({ email, password }))
-    navigate('/')
-    console.log(email, password)
+    dispatch(checkUserHandler())
+    dispatch(loginCheckStatusHandler())
+    if (isError) {
+      navigate('/login')
+    } else {
+      dispatch(clearErrorHandler())
+      dispatch(loginUser({ email, password }))
+      dispatch(loginHandler({ email, password }))
+      navigate('/')
+      console.log('user *****', user)
+    }
   }
 
   return (
@@ -50,6 +64,9 @@ const LoginPage: React.FC<Props> = () => {
         />
         <button type='submit' className='auth_btn'>
           Login
+        </button>
+        <button type='button' className='auth_btn' onClick={() => navigate('/register')}>
+          Return to register page
         </button>
       </form>
     </div>

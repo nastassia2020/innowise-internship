@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 
-import { registerUser, firstLoadHandler } from '../../features/authSlice/authSlice'
+import { registerUser } from '../../features/authSlice/authSlice'
 import './RegisterPage.css'
 
 interface Props {}
 
 const RegisterPage: React.FC<Props> = () => {
-  const { firstEnter } = useAppSelector((state) => state.auth)
+  const { firstEnter, isError } = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -30,10 +30,13 @@ const RegisterPage: React.FC<Props> = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(registerUser(userData))
-    dispatch(firstLoadHandler(false))
-    navigate('/login')
-    console.log(userData)
+    if (isError) {
+      console.log('isError', isError)
+    } else {
+      dispatch(registerUser(userData))
+      navigate('/login')
+      console.log('isError', isError)
+    }
   }
 
   return (
