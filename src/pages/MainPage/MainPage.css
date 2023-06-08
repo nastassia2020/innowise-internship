@@ -1,7 +1,7 @@
 .main-page {
   background: gray;
   width: 100vw;
-  height: 100%;
+  height: 100vh;
 }
 
 .canvas {
@@ -51,4 +51,59 @@
   left: 140px;
   bottom: 280px;
   right: 1000px;
+}
+
+@media screen and (max-width: 762px) {
+
+  .canvas {
+    cursor: pointer;
+    margin-top: 15px;
+    margin-left: 60px;
+    background: white;
+    width: 500px;
+    height: 300px;
+  }
+
+  .collection-btn {
+    background: orchid;
+    width: 60px;
+    height: 30px;
+    position: absolute;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 8px;
+  }
+
+  .my-collection {
+    top: 50px;
+    left: 10px;
+    bottom: 280px;
+    right: 1100px;
+  }
+
+  .all-collections {
+    top: 50px;
+    left: 80px;
+    bottom: 280px;
+    right: 1000px;
+  }
+
+  .color-width-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: absolute;
+    top: 100px;
+    left: 10px;
+    bottom: 100px;
+    right: 1000px;
+    width: 100px;
+    height: 120px;
+    align-items: flex-start;
+    color: white;
+    font-size: 10px;
+  }
+
+
 }

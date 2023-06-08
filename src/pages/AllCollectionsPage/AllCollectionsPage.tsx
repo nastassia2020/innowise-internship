@@ -38,12 +38,10 @@ function AllCollectionsPage() {
       .map(({ drawingData }) => drawingData.dataURL),
   }))
 
-  console.log(collections.collections)
-
-  const filteredUsers = usersCollections.filter((user) => user.email.includes(search))
+  console.log('usersCollections******* ', usersCollections)
 
   return (
-    <div className='drawings-list'>
+    <div className='collection-list'>
       <h2>All collections</h2>
       <button className='drawings-list-btn' type='button' onClick={() => navigate('/')}>
         Return to canvas
@@ -56,26 +54,32 @@ function AllCollectionsPage() {
         className='search-input'
       />
 
-      {search.length && filteredUsers
-        ? filteredUsers.map((user) => (
-            <>
-              <p key={user.email}>{user.email}</p>
-              <div className='drawing-collection'>
-                {user.data.slice(-4).map((drawing) => (
-                  <img className='drawing' key={user.email} src={drawing} alt={`Drawing ${drawing}`} />
-                ))}
+      {search.length > 0
+        ? usersCollections
+            .filter((user) => user.email.includes(search))
+            .map((user) => (
+              <div className='user-collection'>
+                <p className='drawing-collection-p' key={user.email}>
+                  {user.email}
+                </p>
+                <div className='drawing-collection'>
+                  {user.data.slice(-1).map((drawing) => (
+                    <img className='drawing' key={user.email} src={drawing} alt={`Drawing ${drawing}`} />
+                  ))}
+                </div>
               </div>
-            </>
-          ))
+            ))
         : usersCollections.map((user) => (
-            <>
-              <p key={user.email}>{user.email}</p>
+            <div className='user-collection'>
+              <p className='drawing-collection-p' key={user.email}>
+                {user.email}
+              </p>
               <div className='drawing-collection'>
-                {user.data.slice(-4).map((drawing) => (
+                {user.data.slice(-1).map((drawing) => (
                   <img className='drawing' key={user.email} src={drawing} alt={`Drawing ${drawing}`} />
                 ))}
               </div>
-            </>
+            </div>
           ))}
     </div>
   )

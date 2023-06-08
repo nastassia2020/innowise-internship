@@ -49,9 +49,7 @@ const MainPage = () => {
             setLineWidth(value)
           }}
         />
-        <output className='price-output' htmlFor='lineWidth'>
-          {lineWidth}
-        </output>
+        <output htmlFor='lineWidth'>{lineWidth}</output>
       </form>
     </div>
   )

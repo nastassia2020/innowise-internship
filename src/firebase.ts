@@ -13,17 +13,6 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 }
 
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyDsHESOjWCrPOqgeSCKZ7z5gaUvm8c_iWc',
-//   authDomain: 'mini-paint-20022.firebaseapp.com',
-//   databaseURL: 'https://mini-paint-20022-default-rtdb.europe-west1.firebasedatabase.app',
-//   projectId: 'mini-paint-20022',
-//   storageBucket: 'mini-paint-20022.appspot.com',
-//   messagingSenderId: '275503139581',
-//   appId: '1:275503139581:web:86a2390f6dbc03f6ae4c94',
-//   measurementId: 'G-V0ZJDZ9Q24',
-// }
-
 const app = initializeApp(firebaseConfig)
 
 export const db = getFirestore(app)
